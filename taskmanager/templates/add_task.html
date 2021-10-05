@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h3 class="red-text text-accent-3 center-align">Add Task</h3>
+<div class="row card-panel grey lighten-5">
+    <form class="col s12" method="POST" action="{{ url_for('add_task') }}">
+        <!-- task name input -->
+        <div class="row">
+            <div class="input-field col s12">
+                <i class="fas fa-pencil-alt prefix red-text text-accent-3"></i>
+                <input name="task_name" id="task_name" minlength="5" maxlength="50" type="text" class="validate"
+                    required>
+                <label for="task_name">Task Name</label>
+            </div>
+        </div>
+        <!-- task description textarea -->
+        <div class="row">
+            <div class="input-field col s12">
+                <i class="fas fa-align-left prefix red-text text-accent-3"></i>
+                <textarea name="task_description" id="task_description" minlength="5" maxlength="200" type="text"
+                    class="validate materialize-textarea" required></textarea>
+                <label for="task_description">Task Description</label>
+            </div>
+        </div>
+        <!-- task due date input, using Materialize datepicker -->
+        <div class="row">
+            <div class="input-field col s12">
+                <i class="fas fa-calendar-alt prefix red-text text-accent-3"></i>
+                <input name="due_date" id="due_date" type="text" class="datepicker validate"
+                    required>
+                <label for="due_date">Due Date</label>
+            </div>
+        </div>
+        <!-- is urgent toggle, using Materialize switch class -->
+        <div class="row">
+            <div class="input-field col s12">
+                <div class="switch">
+                    <i class="fas fa-exclamation-circle prefix red-text text-accent-3"></i>
+                    <label for="is_urgent">
+                        <input name="is_urgent" id="is_urgent" type="checkbox">
+                        <span class="lever"></span>
+                        Is Urgent
+                    </label>
+                </div>
+            </div>
+        </div>
+        <!-- Category id - category dropdown list, using Materialize select class -->
+        <div class="row">
+            <div class="input-field col s12">
+                <i class="fas fa-folder-open prefix red-text text-accent-3"></i>
+                <select name="category_id" id="category_id" class="validate" required>
+                    <!-- default option -->
+                    <option value="" disabled selected>Choose Category</option>
+                    <!-- remaining options, from list of categories passed in from render template in routes, retrieved from db -->
+                    {% for category in categories %}
+                        <option value="{{ category.id }}">{{ category.category_name }}</option>
+                    {% endfor %}
+                </select>
+                <label for="category_id">Category</label>
+            </div>
+        </div>
+        <!-- submit button -->
+        <div class="row">
+            <div class="col s12 center-align">
+                <button type="submit" class="btn-large red accent-3">
+                    Add Task <i class="fas fa-plus-square right"></i>
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}

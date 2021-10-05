@@ -61,3 +61,31 @@ def delete_category(category_id):
     # commit the session changes
     db.session.commit()
     return redirect(url_for("categories"))
+
+
+# add task page
+@app.route("/add_task", methods=["GET", "POST"])
+def add_task():
+    # Task requires category to be assigned Retrieve categories as before
+    # below will generate a dropdown list for user to choose from on form
+    categories = list(Category.query.order_by(Category.category_name).all())
+    # if the request method is POST, then new variable task=new instance
+    # of Task model, with required fields, data from form
+    if request.method == "POST":
+        task = Task(
+            task_name=request.form.get("task_name"),
+            task_description=request.form.get("task_description"),
+            is_urgent=bool(True if request.form.get("is_urgent") else False),
+            due_date=request.form.get("due_date"),
+            # chosen from dropdown created from categories list above
+            category_id=request.form.get("category_id")
+        )
+        # add + commit the new task to database session
+        db.session.add(task)
+        db.session.commit()
+        # redirect to the home page after form submitted
+        return redirect(url_for("home"))
+    # GET method:
+    # categories above is passed into the render template, using variable name
+    # categories - the add_task template is expecting this variable name
+    return render_template("add_task.html", categories=categories)
