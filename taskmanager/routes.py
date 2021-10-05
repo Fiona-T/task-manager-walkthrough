@@ -113,3 +113,14 @@ def edit_task(task_id):
     # categories + task above are passed into the render template using
     # variable name, variable name is used in the edit task template
     return render_template("edit_task.html", task=task, categories=categories)
+
+
+@app.route("/delete_task/<int:task_id>")
+def delete_task(task_id):
+    # get the task from the database using task_id variable
+    task = Task.query.get_or_404(task_id)
+    # delete the category using variable above if found
+    db.session.delete(task)
+    # commit the session changes
+    db.session.commit()
+    return redirect(url_for("home"))
