@@ -50,3 +50,14 @@ def edit_category(category_id):
     # category above is passed into the render template, using variable name
     # category - the template is expecting this variable name
     return render_template("edit_category.html", category=category)
+
+
+@app.route("/delete_category/<int:category_id>")
+def delete_category(category_id):
+    # get the category from the database using category_id variable
+    category = Category.query.get_or_404(category_id)
+    # delete the category using variable above if found
+    db.session.delete(category)
+    # commit the session changes
+    db.session.commit()
+    return redirect(url_for("categories"))
