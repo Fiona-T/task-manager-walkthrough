@@ -92,3 +92,24 @@ def add_task():
     # categories above is passed into the render template, using variable name
     # categories - the add_task template is expecting this variable name
     return render_template("add_task.html", categories=categories)
+
+
+# edit task page, passing task_id from tasks page
+@app.route("/edit_task/<int:task_id>", methods=["GET", "POST"])
+def edit_task(task_id):
+    # get the task from the database using task_id variable
+    task = Task.query.get_or_404(task_id)
+    categories = list(Category.query.order_by(Category.category_name).all())
+    if request.method == "POST":
+        # update each column header with data from the form
+        task.task_name = request.form.get("task_name")
+        task.task_description = request.form.get("task_description")
+        task.is_urgent = bool(True if request.form.get("is_urgent") else False)
+        task.due_date = request.form.get("due_date")
+        task.category_id = request.form.get("category_id")
+        # commit the session
+        db.session.commit()
+    # GET method:
+    # categories + task above are passed into the render template using
+    # variable name, variable name is used in the edit task template
+    return render_template("edit_task.html", task=task, categories=categories)
