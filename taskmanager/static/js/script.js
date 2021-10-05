@@ -19,5 +19,9 @@
     let selects = document.querySelectorAll('select');
     // initialization
     M.FormSelect.init(selects);
+    // collapsible that displays task details on tasks page
+    let collapsibles = document.querySelectorAll('.collapsible');
+    // initialization
+    M.Collapsible.init(collapsibles);
 
   });
