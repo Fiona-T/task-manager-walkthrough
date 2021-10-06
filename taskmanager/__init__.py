@@ -1,4 +1,6 @@
 import os
+# regular expression package - to fix url for db on Heroku
+import re
 # import Flask class from flask
 from flask import Flask
 # import SQLAlchemy class from flask_sqlalchemy
@@ -20,7 +22,15 @@ app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY")
 if os.environ.get("DEVELOPMENT") == "True":
     app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DB_URL")
 else:
-    app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URL")
+    # fix error in db path set by Heroku: postgres:// instead of postgresql://
+    uri = os.environ.get("DATABASE_URL")   # heroku db path env variable
+    # get the env variable from heroku
+    # replace the start of the path, this is now assigned to variable uri
+    # we use variable uri for the env variable now, instead of DATATBASE_URL
+    # uri will either be DATABSE_URL, or the replaced version
+    if uri.startswith("postgres://"):
+        uri = uri.replace("postgres://", "postgresql://", 1)
+    app.config["SQLALCHEMY_DATABASE_URI"] = uri   # heroku
 
 # create instance of imported SQLAlchemy class, set to our instance of Flask
 db = SQLAlchemy(app)
