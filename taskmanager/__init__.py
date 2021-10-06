@@ -15,7 +15,7 @@ app = Flask(__name__)
 app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY")
 # for database url config variable, need to specify which url path to use
 # there are two versions of db, one local and one in Heroku
-# if env variable DEVELOPMENT is set to true, use the local database path DB_URL
+# if env variable DEVELOPMENT is set to true,use the local database path DB_URL
 # otherwise (as this is not set in Heroku), use Heroku path DATABASE_URL
 if os.environ.get("DEVELOPMENT") == "True":
     app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DB_URL")
